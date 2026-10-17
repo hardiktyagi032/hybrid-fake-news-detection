@@ -1,0 +1,76 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.pytest-tmp/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# IDE and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Data: preserve locally, never commit by default
+data/raw/**
+data/interim/**
+data/processed/**
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+*.csv
+*.tsv
+*.parquet
+*.feather
+*.arrow
+*.xlsx
+*.xls
+
+# Models and experiment artifacts
+models/
+checkpoints/
+artifacts/
+mlruns/
+wandb/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.joblib
+*.pkl
+
+# Caches and generated output
+.cache/
+cache/
+tmp/
+reports/generated/
+notebooks/.ipynb_checkpoints/
+*.log
+
+# Frontend build output and dependencies
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Local database and containers
+*.db
+*.sqlite
+*.sqlite3
+pgdata/
+redis-data/

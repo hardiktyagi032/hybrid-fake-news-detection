@@ -1,0 +1,46 @@
+"""Verify repository structure and setup-safe imports."""
+
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from backend.main import setup_status  # noqa: E402
+
+
+REQUIRED = [
+    "README.md",
+    ".gitignore",
+    ".env.example",
+    "requirements.txt",
+    "requirements-dev.txt",
+    "backend/main.py",
+    "docs/research/research_review.md",
+    "docs/architecture/system_design.md",
+    "docs/data/dataset_protocol.md",
+    "data/raw",
+    "data/interim",
+    "data/processed",
+    "frontend",
+    "tests",
+]
+
+
+def main() -> int:
+    missing = [item for item in REQUIRED if not (ROOT / item).exists()]
+    payload = {
+        "status": "ok" if not missing else "failed",
+        "missing": missing,
+        "setup": setup_status(),
+    }
+    print(json.dumps(payload, indent=2))
+    return 0 if not missing else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
