@@ -20,15 +20,18 @@ This hypothesis has not yet been experimentally validated for this project. Repo
 
 ## Current status
 
-Phases 1-3 are complete at repository initialization:
+Phases 1-4 are complete:
 
 - supplied research materials reviewed and indexed;
 - proposed architecture, feature vector, assumptions, and risks documented;
 - private GitHub repository and local clone established;
 - reproducible Python environment instructions and initial checks added;
-- dataset inspection tooling tested with synthetic fixtures.
+- the eight user-supplied dataset sources downloaded and preserved with SHA-256 hashes;
+- source-specific schema, label, missingness, duplication, conflict, and leakage checks completed;
+- conservative cleaned copies and deterministic leakage-aware splits generated locally;
+- preparation tooling tested with synthetic fixtures and verified against the real outputs.
 
-Phase 4 is waiting for the user-supplied dataset. No replacement dataset has been selected or downloaded.
+The raw, interim, and processed dataset files remain local and are ignored by Git. Aggregate results and limitations are recorded in `docs/data/dataset_preparation_report.md`.
 
 Not implemented: production APIs, data extraction services, classifiers, RAG, NLI, credibility scoring, fusion training, LLM calls, database services, frontend, deployment, and model evaluation.
 
@@ -57,8 +60,8 @@ data/          ignored raw/interim/processed data locations
 docs/          research synthesis, architecture, decisions, and data protocol
 frontend/      frontend scope only; application not implemented
 notebooks/     future experiments; outputs and checkpoints are ignored
-scripts/       setup verification and non-mutating dataset inspection
-tests/         initial automated checks and synthetic fixtures
+scripts/       setup verification, dataset inspection, preparation, and validation
+tests/         setup and synthetic data-preparation checks
 ```
 
 ## Local setup
@@ -68,21 +71,26 @@ py -3.14 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements-dev.txt
+python -m pip install -r requirements-data.txt
 python -m pytest
 python scripts\verify_setup.py
+python scripts\validate_prepared_data.py --root .
 ```
 
-Runtime dependencies intentionally remain empty until the real dataset and post-Phase-4 implementation choices justify them. Development dependencies are isolated in `requirements-dev.txt`.
+Application runtime dependencies intentionally remain empty until post-Phase-4 implementation choices justify them. Development dependencies are isolated in `requirements-dev.txt`; the Phase 4 preparation stack is isolated in `requirements-data.txt`.
 
-## Dataset handoff
+## Dataset preparation
 
-Place the original user-supplied dataset under `data/raw/`. Files under `data/` are ignored by Git by default. Before any transformation, record its SHA-256 hash and run:
+Files under `data/` are ignored by Git by default. The received source archives are under `data/raw/_archives/`, extracted sources under `data/raw/sources/`, inspection and exclusions under `data/interim/`, and cleaned datasets/splits under `data/processed/`.
+
+To reproduce Phase 4 from the preserved raw sources:
 
 ```powershell
-python scripts\dataset_inspect.py data\raw\YOUR_FILE.csv --output data\interim\inspection.json
+python scripts\prepare_datasets.py --root . --seed 20261017 --receipt-date 2026-10-17
+python scripts\validate_prepared_data.py --root .
 ```
 
-The inspection command is read-only with respect to the input. Cleaning and splitting decisions must be made from the actual schema and documented under `docs/data/` before generating processed outputs.
+The preparation command never writes into `data/raw/`. It preserves raw and cleaned text separately, quarantines empty/ambiguous duplicate groups, and does not invent binary mappings for datasets whose documentation is insufficient.
 
 ## Safety and research integrity
 
@@ -93,4 +101,4 @@ The inspection command is read-only with respect to the input. Cleaning and spli
 - Report accuracy together with precision, recall, F1, calibration, and error analysis.
 - Treat confidence as a calibrated estimate, not a guarantee of truth.
 
-See `docs/research/research_review.md`, `docs/architecture/system_design.md`, and `docs/data/dataset_protocol.md` for the current evidence base and open decisions.
+See `docs/research/research_review.md`, `docs/architecture/system_design.md`, `docs/data/dataset_protocol.md`, and `docs/data/dataset_preparation_report.md` for the current evidence base, results, and open decisions.

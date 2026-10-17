@@ -1,6 +1,6 @@
 # Dataset inspection and preparation protocol
 
-Status: waiting for the user-supplied dataset. No substitute dataset will be selected or downloaded.
+Status: executed on the eight user-supplied sources received on 2026-10-17. No substitute dataset was selected. See `dataset_preparation_report.md` for actual results.
 
 ## 1. Preserve and identify
 
