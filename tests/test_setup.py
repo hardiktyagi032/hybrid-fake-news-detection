@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_setup_status_is_honest_about_scope() -> None:
     status = setup_status()
-    assert status["phase"] == "waiting-for-user-dataset"
+    assert status["phase"] == "phase-4-complete"
     assert status["application_implemented"] == "false"
 
 
