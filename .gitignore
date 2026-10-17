@@ -57,7 +57,7 @@ wandb/
 
 # Caches and generated output
 .cache/
-cache/
+/cache/
 tmp/
 reports/generated/
 notebooks/.ipynb_checkpoints/

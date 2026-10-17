@@ -37,7 +37,8 @@ def test_required_repository_boundaries_exist() -> None:
         "frontend",
         "scripts",
     ]
-    assert all((ROOT / item).exists() for item in expected)
+    missing = [item for item in expected if not (ROOT / item).exists()]
+    assert missing == []
 
 
 def test_settings_summary_does_not_expose_connection_values(monkeypatch) -> None:
