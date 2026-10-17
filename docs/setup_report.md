@@ -27,8 +27,11 @@ Date: 2026-10-17 (Asia/Calcutta)
 | Python bytecode compilation | Passed |
 | Git whitespace validation | Passed |
 | Ignore rules for `.env`, datasets, virtual environment, model weights, and frontend dependencies | Passed |
+| GitHub Actions `initial-checks` | Passed on Linux with Python 3.12 |
 
 The first sandboxed dependency installation attempt failed because external DNS was unavailable. The approved network execution succeeded. The first test attempt exposed a sandbox temporary-directory restriction and a direct-script import issue; both were corrected, and all checks passed on rerun.
+
+The first remote workflow exposed that a root cache ignore rule also removed the planned `backend/cache/` boundary from a clean clone. The ignore rule was narrowed, the missing tracked marker was added, and the corrected workflow completed successfully.
 
 ## Phase boundary
 
