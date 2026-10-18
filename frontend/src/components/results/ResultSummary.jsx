@@ -1,0 +1,2 @@
+import ConfidenceScore from './ConfidenceScore';
+export default function ResultSummary() { return <section className="result-summary panel"><div className="result-copy"><span className="eyebrow">FINAL CLASSIFICATION</span><div className="verdict"><span className="verdict-dot" /> Misleading</div><p>The claim contains a factual assertion that conflicts with credible, independent evidence.</p><div className="result-meta"><span>4 claims analyzed</span><span>12 sources retrieved</span><span>3 sources verified</span></div></div><ConfidenceScore /></section>; }

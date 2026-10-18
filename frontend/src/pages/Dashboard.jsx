@@ -1,0 +1,7 @@
+import { useApp } from '../context/AppContext';
+import StatsCard from '../components/dashboard/StatsCard';
+import ClassificationChart from '../components/dashboard/ClassificationChart';
+import ActivityChart from '../components/dashboard/ActivityChart';
+import { history } from '../mock/mockAnalysis';
+import HistoryItem from '../components/history/HistoryItem';
+export default function Dashboard() { const { setPage } = useApp(); return <main className="page dashboard"><section className="stats-row"><StatsCard label="Total analyses" value="54" change="↗ 12% from last month" accent="teal" /><StatsCard label="Average confidence" value="86.4%" change="↗ 4.2% stronger evidence" accent="blue" /><StatsCard label="Evidence retrieved" value="476" change="Across 54 investigations" accent="amber" /></section><div className="dashboard-grid"><ClassificationChart /><ActivityChart /><section className="recent panel"><div className="section-heading"><div><span className="eyebrow">RECENT ACTIVITY</span><h3>Latest analyses</h3></div><button onClick={() => setPage('history')}>View history →</button></div>{history.slice(0,3).map(item => <HistoryItem key={item.title} item={item} onOpen={() => setPage('result')} />)}</section><section className="source-overview panel"><span className="eyebrow">SOURCE OVERVIEW</span><h3>Evidence coverage</h3><div className="coverage"><strong>84%</strong><p>of recent analyses returned at least two high-quality sources.</p></div><button onClick={() => setPage('sources')}>Explore sources →</button></section></div></main>; }

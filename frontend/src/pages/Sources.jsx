@@ -1,0 +1,4 @@
+import { useApp } from '../context/AppContext';
+import EvidenceList from '../components/evidence/EvidenceList';
+import SourceFilters from '../components/evidence/SourceFilters';
+export default function Sources() { const { sourceFilter, setSourceFilter } = useApp(); return <main className="page sources-page"><section className="source-hero panel"><div><span className="eyebrow">EVIDENCE LIBRARY</span><h2>Sources, not black boxes.</h2><p>Trace every conclusion back to the source and claim that informed it.</p></div><div className="source-stat"><strong>476</strong><span>sources retrieved</span></div></section><div className="source-toolbar"><label className="search-field"><span>⌕</span><input placeholder="Search sources" /></label><SourceFilters filter={sourceFilter} onChange={setSourceFilter} /></div><EvidenceList filter={sourceFilter} /></main>; }
