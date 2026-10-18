@@ -56,7 +56,9 @@ def test_label_validation_rejects_non_binary_or_single_class() -> None:
         validate_binary_labels([0, "unknown", 1])
 
 
-@pytest.mark.parametrize("model_name", ["logistic_regression", "linear_svm"])
+@pytest.mark.parametrize(
+    "model_name", ["logistic_regression", "linear_svm", "random_forest"]
+)
 def test_approved_pipeline_returns_fake_probabilities_and_metrics(model_name: str) -> None:
     frame = fixture_frame()
     config = ClassicalModelConfig(max_features=100, min_df=1, ngram_max=1)

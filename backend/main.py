@@ -15,7 +15,7 @@ def setup_status() -> dict[str, str]:
     return {
         "project": "hybrid-fake-news-detection",
         "version": __version__,
-        "phase": "classical-ml-robustness-audit",
+        "phase": "classical-ml-three-model-audit",
         "application_implemented": "false",
     }
 

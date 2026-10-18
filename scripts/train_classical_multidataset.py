@@ -1,4 +1,4 @@
-"""Train dataset-balanced Logistic Regression and Linear SVM classifiers."""
+"""Train the dataset-balanced approved classical classifiers."""
 
 from __future__ import annotations
 

@@ -28,15 +28,16 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 from sklearn.pipeline import Pipeline
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import LinearSVC
 
 
-SUPPORTED_MODELS = ("logistic_regression", "linear_svm")
+SUPPORTED_MODELS = ("logistic_regression", "linear_svm", "random_forest")
 
 
 @dataclass(frozen=True)
 class ClassicalModelConfig:
-    """Reproducible configuration shared by the two classical candidates."""
+    """Reproducible configuration shared by the classical candidates."""
 
     max_features: int = 75_000
     min_df: int = 2
@@ -48,6 +49,12 @@ class ClassicalModelConfig:
     random_state: int = 20_261_017
     logistic_c: float = 2.0
     svm_c: float = 1.0
+    random_forest_estimators: int = 200
+    random_forest_criterion: str = "gini"
+    random_forest_max_depth: int | None = None
+    random_forest_min_samples_leaf: int = 2
+    random_forest_max_features: str | float = "sqrt"
+    random_forest_n_jobs: int = -1
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -128,6 +135,17 @@ def build_pipeline(model_name: str, config: ClassicalModelConfig | None = None) 
             ),
             method="sigmoid",
             cv=3,
+        )
+    elif model_name == "random_forest":
+        classifier = RandomForestClassifier(
+            n_estimators=config.random_forest_estimators,
+            criterion=config.random_forest_criterion,
+            max_depth=config.random_forest_max_depth,
+            min_samples_leaf=config.random_forest_min_samples_leaf,
+            max_features=config.random_forest_max_features,
+            class_weight=config.class_weight,
+            n_jobs=config.random_forest_n_jobs,
+            random_state=config.random_state,
         )
     else:
         raise ValueError(f"Unsupported model {model_name!r}; choose one of {SUPPORTED_MODELS}")

@@ -10,7 +10,12 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from backend.ml.classical_model import ClassicalModelConfig, build_pipeline, combine_text_fields
+from backend.ml.classical_model import (
+    SUPPORTED_MODELS,
+    ClassicalModelConfig,
+    build_pipeline,
+    combine_text_fields,
+)
 from scripts.train_classical_multidataset import (
     DEFAULT_DATASETS,
     dataset_class_balanced_weights,
@@ -76,8 +81,8 @@ def main() -> int:
     parser.add_argument(
         "--models",
         nargs="+",
-        choices=("logistic_regression", "linear_svm"),
-        default=["logistic_regression", "linear_svm"],
+        choices=SUPPORTED_MODELS,
+        default=list(SUPPORTED_MODELS),
     )
     parser.add_argument("--max-features", type=int, default=100_000)
     args = parser.parse_args()

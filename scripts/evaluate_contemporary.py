@@ -32,24 +32,27 @@ def run_evaluation(root: Path) -> dict[str, Any]:
     records = fixture["records"]
     documents = [record["text"] for record in records]
     labels = np.asarray([record["label_binary_fake"] for record in records], dtype=int)
-    candidates = {
-        "v1_logistic_regression": (
-            root / "models" / "classical" / "multidataset_v1" / "logistic_regression" / "pipeline.joblib",
-            0.5,
-        ),
-        "v1_linear_svm": (
-            root / "models" / "classical" / "multidataset_v1" / "linear_svm" / "pipeline.joblib",
-            0.5,
-        ),
-        "v2_logistic_regression": (
-            root / "models" / "classical" / "multidataset_v2_robust" / "logistic_regression" / "pipeline.joblib",
-            0.49,
-        ),
-        "v2_linear_svm": (
-            root / "models" / "classical" / "multidataset_v2_robust" / "linear_svm" / "pipeline.joblib",
-            0.71,
-        ),
-    }
+    candidates: dict[str, tuple[Path, float]] = {}
+    for version, model_set in (
+        ("v1", "multidataset_v1"),
+        ("v2", "multidataset_v2_robust"),
+    ):
+        model_root = root / "models" / "classical" / model_set
+        benchmark_path = model_root / "benchmark.json"
+        if not benchmark_path.is_file():
+            continue
+        benchmark = json.loads(benchmark_path.read_text(encoding="utf-8"))
+        for model_name in benchmark.get("models", []):
+            threshold = float(
+                benchmark.get("validation", {})
+                .get(model_name, {})
+                .get("selected_threshold", {})
+                .get("threshold", 0.5)
+            )
+            candidates[f"{version}_{model_name}"] = (
+                model_root / model_name / "pipeline.joblib",
+                threshold,
+            )
     results = {}
     predictions = []
     skipped = {}

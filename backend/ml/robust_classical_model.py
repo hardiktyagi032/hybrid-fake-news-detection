@@ -9,6 +9,7 @@ from typing import Any, Iterable
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.calibration import CalibratedClassifierCV
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import FeatureUnion, Pipeline
@@ -89,6 +90,12 @@ class RobustRepresentationConfig:
     max_df: float = 0.98
     logistic_c: float = 2.0
     svm_c: float = 1.0
+    random_forest_estimators: int = 200
+    random_forest_criterion: str = "gini"
+    random_forest_max_depth: int | None = None
+    random_forest_min_samples_leaf: int = 2
+    random_forest_max_features: str | float = "sqrt"
+    random_forest_n_jobs: int = -1
     random_state: int = 20_261_017
 
     def to_dict(self) -> dict[str, Any]:
@@ -102,6 +109,12 @@ class RobustRepresentationConfig:
             "max_df": self.max_df,
             "logistic_c": self.logistic_c,
             "svm_c": self.svm_c,
+            "random_forest_estimators": self.random_forest_estimators,
+            "random_forest_criterion": self.random_forest_criterion,
+            "random_forest_max_depth": self.random_forest_max_depth,
+            "random_forest_min_samples_leaf": self.random_forest_min_samples_leaf,
+            "random_forest_max_features": self.random_forest_max_features,
+            "random_forest_n_jobs": self.random_forest_n_jobs,
             "random_state": self.random_state,
         }
 
@@ -152,8 +165,21 @@ def build_robust_pipeline(model_name: str, config: RobustRepresentationConfig) -
             method="sigmoid",
             cv=3,
         )
+    elif model_name == "random_forest":
+        classifier = RandomForestClassifier(
+            n_estimators=config.random_forest_estimators,
+            criterion=config.random_forest_criterion,
+            max_depth=config.random_forest_max_depth,
+            min_samples_leaf=config.random_forest_min_samples_leaf,
+            max_features=config.random_forest_max_features,
+            class_weight=None,
+            n_jobs=config.random_forest_n_jobs,
+            random_state=config.random_state,
+        )
     else:
-        raise ValueError("Only logistic_regression and linear_svm are supported")
+        raise ValueError(
+            "Only logistic_regression, linear_svm, and random_forest are supported"
+        )
 
     return Pipeline(
         [

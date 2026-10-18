@@ -216,7 +216,7 @@ def threshold_and_error_audit(root: Path, frame: pd.DataFrame) -> dict[str, Any]
     train = frame[frame["split"].eq("train")].copy()
     train_labels = train["label_binary_fake"].astype(int).to_numpy()
     train_weights = dataset_class_balanced_weights(train)
-    for model_name in ("logistic_regression", "linear_svm"):
+    for model_name in ("logistic_regression", "linear_svm", "random_forest"):
         # The persisted final pipeline was refit on train + validation. Rebuild a
         # train-only candidate so validation remains genuinely unseen here.
         model = build_pipeline(model_name, config)

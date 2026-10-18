@@ -26,8 +26,9 @@ def test_robust_pipeline_supports_only_approved_models() -> None:
     config = RobustRepresentationConfig(representation="word", word_max_features=100)
     assert build_robust_pipeline("logistic_regression", config).named_steps["classifier"] is not None
     assert build_robust_pipeline("linear_svm", config).named_steps["classifier"] is not None
-    with pytest.raises(ValueError, match="Only logistic_regression and linear_svm"):
-        build_robust_pipeline("random_forest", config)
+    assert build_robust_pipeline("random_forest", config).named_steps["classifier"] is not None
+    with pytest.raises(ValueError, match="Only logistic_regression, linear_svm, and random_forest"):
+        build_robust_pipeline("naive_bayes", config)
 
 
 def test_liar_extremes_receive_quarter_dataset_weight() -> None:

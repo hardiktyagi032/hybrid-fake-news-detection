@@ -1,4 +1,4 @@
-"""Train source-robust Logistic Regression and Linear SVM v2 models."""
+"""Train source-robust Logistic Regression, Linear SVM, and Random Forest models."""
 
 from __future__ import annotations
 
@@ -15,7 +15,12 @@ import pandas as pd
 import sklearn
 from sklearn.metrics import f1_score
 
-from backend.ml.classical_model import combine_text_fields, evaluate_binary_classifier, fake_probabilities
+from backend.ml.classical_model import (
+    SUPPORTED_MODELS,
+    combine_text_fields,
+    evaluate_binary_classifier,
+    fake_probabilities,
+)
 from backend.ml.robust_classical_model import RobustRepresentationConfig, build_robust_pipeline
 from scripts.select_robust_representation import load_liar_extremes
 from scripts.train_classical import sha256_file
@@ -72,11 +77,27 @@ def fit_frame(model: Any, frame: pd.DataFrame) -> Any:
     return model
 
 
-def run_training(root: Path, datasets: list[str], model_names: list[str]) -> dict[str, Any]:
+def run_training(
+    root: Path,
+    datasets: list[str],
+    model_names: list[str],
+    *,
+    merge_existing: bool = False,
+) -> dict[str, Any]:
     root = root.resolve()
+    unknown = sorted(set(model_names).difference(SUPPORTED_MODELS))
+    if unknown or not model_names or len(model_names) != len(set(model_names)):
+        raise ValueError(f"Models must be unique approved values; invalid={unknown}")
     config = RobustRepresentationConfig(representation="word", mask_sources=True, mask_framing=False)
     liar_train = load_liar_extremes(root)
-    validation: dict[str, Any] = {}
+    output_dir = root / "models" / "classical" / MODEL_SET_NAME
+    existing: dict[str, Any] = {}
+    benchmark_path = output_dir / "benchmark.json"
+    if merge_existing and benchmark_path.is_file():
+        existing = json.loads(benchmark_path.read_text(encoding="utf-8"))
+        if existing.get("model_set") != MODEL_SET_NAME or existing.get("datasets") != datasets:
+            raise ValueError("Existing benchmark is not compatible with this training request")
+    validation: dict[str, Any] = dict(existing.get("validation", {}))
 
     for model_name in model_names:
         fold_probabilities = []
@@ -108,8 +129,11 @@ def run_training(root: Path, datasets: list[str], model_names: list[str]) -> dic
             "selected_threshold": selected_threshold,
         }
 
+    all_model_names = [
+        name for name in SUPPORTED_MODELS if name in set(existing.get("models", [])) | set(model_names)
+    ]
     selected_model = max(
-        model_names,
+        all_model_names,
         key=lambda name: (
             validation[name]["selected_threshold"]["mean_dataset_macro_f1"],
             validation[name]["selected_threshold"]["worst_dataset_macro_f1"],
@@ -124,9 +148,8 @@ def run_training(root: Path, datasets: list[str], model_names: list[str]) -> dic
     )
     development = pd.concat([core_development, liar_train], ignore_index=True)
     test = load_combined_split(root, datasets, "test")
-    output_dir = root / "models" / "classical" / MODEL_SET_NAME
-    artifacts: dict[str, Any] = {}
-    test_metrics: dict[str, Any] = {}
+    artifacts: dict[str, Any] = dict(existing.get("artifacts", {}))
+    test_metrics: dict[str, Any] = dict(existing.get("held_out_test_metrics", {}))
     for model_name in model_names:
         print(f"Final robust refit: {model_name}", flush=True)
         model = fit_frame(build_robust_pipeline(model_name, config), development)
@@ -152,7 +175,7 @@ def run_training(root: Path, datasets: list[str], model_names: list[str]) -> dic
         "status": "completed",
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "model_set": MODEL_SET_NAME,
-        "models": model_names,
+        "models": all_model_names,
         "selected_model": selected_model,
         "datasets": datasets,
         "liar_binary_mapping": {"true": 0, "false": 1, "pants-fire": 1},
@@ -169,6 +192,7 @@ def run_training(root: Path, datasets: list[str], model_names: list[str]) -> dic
             "test": int(len(test)),
         },
         "artifacts": artifacts,
+        "update_mode": "merge_existing" if merge_existing else "full_rebuild",
         "versions": {
             "python": platform.python_version(),
             "pandas": pd.__version__,
@@ -194,11 +218,16 @@ def main() -> int:
     parser.add_argument(
         "--models",
         nargs="+",
-        choices=("logistic_regression", "linear_svm"),
-        default=["logistic_regression", "linear_svm"],
+        choices=SUPPORTED_MODELS,
+        default=list(SUPPORTED_MODELS),
+    )
+    parser.add_argument(
+        "--merge-existing",
+        action="store_true",
+        help="Train only requested models and preserve compatible models already in benchmark.json.",
     )
     args = parser.parse_args()
-    run_training(args.root, args.datasets, args.models)
+    run_training(args.root, args.datasets, args.models, merge_existing=args.merge_existing)
     return 0
 
 
