@@ -1,3 +1,3 @@
-"""Setup-safe package boundary for the future backend implementation."""
+"""Hybrid fake-news detection package."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

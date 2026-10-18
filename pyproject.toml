@@ -1,6 +1,6 @@
 [project]
 name = "hybrid-fake-news-detection"
-version = "0.1.0"
+version = "0.2.0"
 description = "Research scaffold for hybrid fake-news detection and evidence-grounded fact verification"
 requires-python = ">=3.11,<3.15"
 dependencies = []
@@ -10,6 +10,12 @@ data = [
   "pandas>=3.0,<4",
   "numpy>=2.3,<3",
   "openpyxl>=3.1,<4",
+]
+ml = [
+  "pandas>=3.0,<4",
+  "numpy>=2.3,<3",
+  "scikit-learn>=1.8,<2",
+  "joblib>=1.5,<2",
 ]
 
 [tool.pytest.ini_options]

@@ -1,7 +1,7 @@
-"""Repository setup status.
+"""Repository implementation status.
 
-This is deliberately not a FastAPI application. Application endpoints remain outside
-the authorized Phase 1-4 scope.
+This is not yet a FastAPI application. The current implementation is limited to
+the reproducible classical ML experiment layer.
 """
 
 from __future__ import annotations
@@ -15,7 +15,7 @@ def setup_status() -> dict[str, str]:
     return {
         "project": "hybrid-fake-news-detection",
         "version": __version__,
-        "phase": "phase-4-complete",
+        "phase": "classical-ml-baseline",
         "application_implemented": "false",
     }
 
