@@ -95,13 +95,9 @@ python -m scripts.train_classical --dataset isot
 
 For Google Colab, use
 [Open in Colab](https://colab.research.google.com/github/hardiktyagi032/hybrid-fake-news-detection/blob/main/notebooks/classical_ml_colab.ipynb).
-Because the repository is private, authorize Colab's GitHub integration for the
-repository first. If the link returns GitHub API `404 Not Found`, download the
-notebook while signed in to GitHub and choose **File > Upload notebook** in Colab.
-The notebook securely reads a
-private-repository token from Colab Secrets, uses Google Drive for persistent data
-and model artifacts, trains only Logistic Regression and Linear SVM, and runs the
-same validation and cross-dataset evaluation workflow.
+The public notebook requires no GitHub token. It uses Google Drive for persistent
+data and model artifacts, trains only Logistic Regression and Linear SVM, and runs
+the same validation and cross-dataset evaluation workflow.
 
 See `docs/ml/classical_baseline.md` for the protocol and
 `docs/ml/classical_results.md` for the measured in-domain and cross-dataset results.
