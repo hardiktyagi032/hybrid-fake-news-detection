@@ -1,6 +1,6 @@
 [project]
 name = "hybrid-fake-news-detection"
-version = "0.3.0"
+version = "0.4.0"
 description = "Research scaffold for hybrid fake-news detection and evidence-grounded fact verification"
 requires-python = ">=3.11,<3.15"
 dependencies = []

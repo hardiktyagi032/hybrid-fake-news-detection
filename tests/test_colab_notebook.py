@@ -29,13 +29,14 @@ def test_colab_notebook_uses_only_approved_classical_models() -> None:
     assert "xgboost" not in notebook_text.casefold()
 
 
-def test_colab_notebook_uses_public_clone_drive_validation_and_external_evaluation() -> None:
+def test_colab_notebook_uses_public_clone_drive_validation_and_robust_evaluation() -> None:
     notebook_text = NOTEBOOK_PATH.read_text(encoding="utf-8")
     required_markers = [
         'https://github.com/{REPO_OWNER}/{REPO_NAME}.git',
         'drive.mount(\\"/content/drive\\")',
         "validate_prepared_data.py",
-        "scripts.train_classical_multidataset",
+        "scripts.train_classical_robust",
+        "scripts.evaluate_contemporary",
         "scripts.predict_classical",
     ]
     assert all(marker in notebook_text for marker in required_markers)

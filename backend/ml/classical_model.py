@@ -151,18 +151,21 @@ def evaluate_binary_classifier(
     model: Pipeline,
     documents: Iterable[str],
     labels: Iterable[Any],
+    threshold: float = 0.5,
 ) -> dict[str, Any]:
     """Evaluate classification and probability quality with JSON-safe values."""
 
+    if not 0.0 < threshold < 1.0:
+        raise ValueError("threshold must be strictly between zero and one")
     y_true = validate_binary_labels(labels)
     y_probability = fake_probabilities(model, documents)
-    y_pred = (y_probability >= 0.5).astype(int)
+    y_pred = (y_probability >= threshold).astype(int)
     precision_by_class, recall_by_class, f1_by_class, support = precision_recall_fscore_support(
         y_true, y_pred, labels=[0, 1], zero_division=0
     )
     return {
         "records": int(len(y_true)),
-        "threshold": 0.5,
+        "threshold": float(threshold),
         "accuracy": float(accuracy_score(y_true, y_pred)),
         "balanced_accuracy": float(balanced_accuracy_score(y_true, y_pred)),
         "precision_fake": float(precision_score(y_true, y_pred, pos_label=1, zero_division=0)),

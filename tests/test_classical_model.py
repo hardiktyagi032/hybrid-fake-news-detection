@@ -76,3 +76,37 @@ def test_approved_pipeline_returns_fake_probabilities_and_metrics(model_name: st
 def test_unknown_model_is_rejected() -> None:
     with pytest.raises(ValueError, match="Unsupported model"):
         build_pipeline("random_guess")
+
+
+def test_evaluation_accepts_custom_threshold() -> None:
+    frame = fixture_frame()
+    model = build_pipeline(
+        "logistic_regression",
+        ClassicalModelConfig(max_features=100, min_df=1, ngram_max=1),
+    )
+    documents = combine_text_fields(frame)
+    model.fit(documents, frame["label_binary_fake"])
+    result = evaluate_binary_classifier(
+        model,
+        documents,
+        frame["label_binary_fake"],
+        threshold=0.4,
+    )
+    assert result["threshold"] == pytest.approx(0.4)
+
+
+def test_evaluation_rejects_invalid_threshold() -> None:
+    frame = fixture_frame()
+    model = build_pipeline(
+        "logistic_regression",
+        ClassicalModelConfig(max_features=100, min_df=1, ngram_max=1),
+    )
+    documents = combine_text_fields(frame)
+    model.fit(documents, frame["label_binary_fake"])
+    with pytest.raises(ValueError, match="threshold"):
+        evaluate_binary_classifier(
+            model,
+            documents,
+            frame["label_binary_fake"],
+            threshold=1.0,
+        )

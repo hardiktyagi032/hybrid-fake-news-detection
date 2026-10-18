@@ -1,0 +1,174 @@
+{
+  "name": "contemporary_2026_diagnostic",
+  "created_date": "2026-10-18",
+  "label_convention": {"0": "real/authentic source claim", "1": "debunked false claim"},
+  "purpose": "Evaluation only; never use for fitting, threshold selection, or feature selection.",
+  "limitations": [
+    "Small hand-curated diagnostic sample, not a representative benchmark.",
+    "Real labels denote claims published by an identified official source and are not independent verification of every underlying assertion.",
+    "False labels are based on the linked fact-check articles.",
+    "Items are short claims rather than full articles."
+  ],
+  "records": [
+    {
+      "id": "real-pib-01",
+      "text": "BHASHINI and the Indian Institute of Science developed a text-to-speech model for the Sourashtra language.",
+      "label_binary_fake": 0,
+      "date": "2026-10-16",
+      "source": "Press Information Bureau",
+      "url": "https://www.pib.gov.in/AllRelease.aspx?lang=1&reg=1"
+    },
+    {
+      "id": "real-pib-02",
+      "text": "India's vice president commissioned the Indian Navy's first indigenous multi-purpose vessel, INS Samarthak, at Karwar.",
+      "label_binary_fake": 0,
+      "date": "2026-10-16",
+      "source": "Press Information Bureau",
+      "url": "https://www.pib.gov.in/AllRelease.aspx?lang=1&reg=1"
+    },
+    {
+      "id": "real-pib-03",
+      "text": "The Narcotics Control Bureau in Jodhpur seized 2.3 kilograms of controlled pharmaceutical tablets and apprehended one person.",
+      "label_binary_fake": 0,
+      "date": "2026-10-15",
+      "source": "Press Information Bureau",
+      "url": "https://www.pib.gov.in/AllRelease.aspx?lang=1&reg=39"
+    },
+    {
+      "id": "real-pib-04",
+      "text": "IIT Jodhpur reported work on robotic heart scans and artificial-intelligence-assisted fracture detection.",
+      "label_binary_fake": 0,
+      "date": "2026-10-14",
+      "source": "Press Information Bureau",
+      "url": "https://www.pib.gov.in/AllRelease.aspx?lang=1&reg=39"
+    },
+    {
+      "id": "real-pib-05",
+      "text": "Mormugao Port became India's first government autonomous body to secure a private 5G CNPN licence.",
+      "label_binary_fake": 0,
+      "date": "2026-10-15",
+      "source": "Press Information Bureau",
+      "url": "https://www.india.gov.in/news/pib-news?pagenumber=13"
+    },
+    {
+      "id": "real-pib-06",
+      "text": "India's defence ministry signed contracts worth 4,106 crore rupees for a GSAT-7C communications satellite and Varunastra torpedoes.",
+      "label_binary_fake": 0,
+      "date": "2026-10-15",
+      "source": "Press Information Bureau",
+      "url": "https://www.india.gov.in/news/pib-news?pagenumber=13"
+    },
+    {
+      "id": "real-pib-07",
+      "text": "The prime minister inaugurated five development projects valued at about 3,350 crore rupees in Ladakh.",
+      "label_binary_fake": 0,
+      "date": "2026-10-15",
+      "source": "Press Information Bureau",
+      "url": "https://www.india.gov.in/news/pib-news?pagenumber=13"
+    },
+    {
+      "id": "real-pib-08",
+      "text": "The Indian Navy commissioned the indigenous anti-submarine warfare shallow-water craft INS Mangrol.",
+      "label_binary_fake": 0,
+      "date": "2026-10-12",
+      "source": "Press Information Bureau",
+      "url": "https://www.india.gov.in/news/pib-news?pagenumber=26"
+    },
+    {
+      "id": "real-pib-09",
+      "text": "India's Ministry of Textiles organized workshops about cybersecurity, secure digital disposal and electronic-waste awareness.",
+      "label_binary_fake": 0,
+      "date": "2026-10-16",
+      "source": "Press Information Bureau",
+      "url": "https://www.pib.gov.in/allRelease.aspx?lang=1&minid=19&reg=3"
+    },
+    {
+      "id": "real-pib-10",
+      "text": "India and Mali commemorated World Cotton Day at United Nations headquarters in New York.",
+      "label_binary_fake": 0,
+      "date": "2026-10-09",
+      "source": "Press Information Bureau",
+      "url": "https://www.pib.gov.in/allRelease.aspx?lang=1&minid=19&reg=3"
+    },
+    {
+      "id": "fake-ap-01",
+      "text": "Any ballot marked by a poll worker will be disqualified in the 2026 United States midterm elections.",
+      "label_binary_fake": 1,
+      "date": "2026-10-15",
+      "source": "Associated Press Fact Check",
+      "url": "https://apnews.com/article/e3e754bf60becd7af84868e24ac1d356"
+    },
+    {
+      "id": "fake-ap-02",
+      "text": "Texas Senate candidate James Talarico secretly spent time in an Ohio mental-health facility.",
+      "label_binary_fake": 1,
+      "date": "2026-10-12",
+      "source": "Associated Press Fact Check",
+      "url": "https://apnews.com/article/634591c8818aeab31c52526032d0387c"
+    },
+    {
+      "id": "fake-ap-03",
+      "text": "The Biden administration revoked White House press passes from more than 400 journalists.",
+      "label_binary_fake": 1,
+      "date": "2026-09-23",
+      "source": "Associated Press Fact Check",
+      "url": "https://apnews.com/article/776a6619b5a1363c164522495ed638d0"
+    },
+    {
+      "id": "fake-ap-04",
+      "text": "The United States and Venezuela together hold more than 60 percent of the world's oil reserves.",
+      "label_binary_fake": 1,
+      "date": "2026-09-22",
+      "source": "Associated Press Fact Check",
+      "url": "https://apnews.com/article/278e6319580a8cfe9dabee90b2107a60"
+    },
+    {
+      "id": "fake-ap-05",
+      "text": "Photographs show New York City mayor Zohran Mamdani as a child together with Jeffrey Epstein.",
+      "label_binary_fake": 1,
+      "date": "2026-02-02",
+      "source": "Associated Press Fact Check",
+      "url": "https://apnews.com/article/4d2adffd9790a83b34abf1eaf6cee349"
+    },
+    {
+      "id": "fake-fullfact-01",
+      "text": "A video of uniformed men dragging a woman shows forced military conscription in Ukraine.",
+      "label_binary_fake": 1,
+      "date": "2026-10-16",
+      "source": "Full Fact",
+      "url": "https://fullfact.org/latest/"
+    },
+    {
+      "id": "fake-fullfact-02",
+      "text": "A circulating photograph genuinely shows a fatal tiger attack at a wildlife park.",
+      "label_binary_fake": 1,
+      "date": "2026-10-15",
+      "source": "Full Fact",
+      "url": "https://fullfact.org/latest/"
+    },
+    {
+      "id": "fake-fullfact-03",
+      "text": "All clips in a viral compilation genuinely show Ukrainian president Volodymyr Zelenskyy belly dancing.",
+      "label_binary_fake": 1,
+      "date": "2026-10-15",
+      "source": "Full Fact",
+      "url": "https://fullfact.org/latest/"
+    },
+    {
+      "id": "fake-fullfact-04",
+      "text": "A video shows a real missile strike causing a passenger aircraft to explode at Riyadh international airport.",
+      "label_binary_fake": 1,
+      "date": "2026-10-15",
+      "source": "Full Fact",
+      "url": "https://fullfact.org/latest/"
+    },
+    {
+      "id": "fake-fullfact-05",
+      "text": "Bill Gates said that water shortages will kill one billion people by 2027.",
+      "label_binary_fake": 1,
+      "date": "2026-10-12",
+      "source": "Full Fact",
+      "url": "https://fullfact.org/latest/"
+    }
+  ]
+}

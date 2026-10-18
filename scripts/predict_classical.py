@@ -12,9 +12,11 @@ import joblib
 from backend.ml.classical_model import fake_probabilities
 
 
-def predict(model_path: Path, title: str, text: str) -> dict[str, Any]:
+def predict(model_path: Path, title: str, text: str, threshold: float = 0.5) -> dict[str, Any]:
     """Return one JSON-safe prediction from a project-generated artifact."""
 
+    if not 0.0 < threshold < 1.0:
+        raise ValueError("threshold must be strictly between zero and one")
     model_path = model_path.resolve()
     if not model_path.is_file():
         raise FileNotFoundError(f"Model artifact not found: {model_path}")
@@ -26,12 +28,13 @@ def predict(model_path: Path, title: str, text: str) -> dict[str, Any]:
     # may be loaded here; never load an artifact supplied by an unknown party.
     model = joblib.load(model_path)
     fake_probability = float(fake_probabilities(model, [document])[0])
-    predicted_class = "fake" if fake_probability >= 0.5 else "real"
+    predicted_class = "fake" if fake_probability >= threshold else "real"
     confidence = fake_probability if predicted_class == "fake" else 1.0 - fake_probability
     return {
         "model": model_path.parent.name,
         "fake_probability": fake_probability,
-        "predicted_class_at_0.5": predicted_class,
+        "threshold": threshold,
+        "predicted_class": predicted_class,
         "confidence": confidence,
     }
 
@@ -41,8 +44,9 @@ def main() -> int:
     parser.add_argument("--model-path", type=Path, required=True)
     parser.add_argument("--title", default="")
     parser.add_argument("--text", default="")
+    parser.add_argument("--threshold", type=float, default=0.5)
     args = parser.parse_args()
-    print(json.dumps(predict(args.model_path, args.title, args.text), sort_keys=True))
+    print(json.dumps(predict(args.model_path, args.title, args.text, args.threshold), sort_keys=True))
     return 0
 
 
