@@ -28,6 +28,8 @@ The frontend currently uses mock analysis data. Set `VITE_API_BASE_URL` in `.env
 The **Model audit** navigation item presents the reproducible classical-ML audit:
 
 - source-held validation and selected thresholds;
+- a generalization line graph across validation, held-out, and contemporary tests;
+- grouped per-dataset performance bars and a complete comparison table;
 - held-out macro-F1 by dataset;
 - ROC-AUC and Brier calibration metrics;
 - contemporary diagnostic confusion matrices;

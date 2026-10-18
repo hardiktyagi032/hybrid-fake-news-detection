@@ -15,6 +15,51 @@ function ModelLegend({ models }) {
   return <div className="audit-legend">{models.map(model => <span key={model.id}><i style={{ background: model.colour }} />{model.shortName}</span>)}</div>;
 }
 
+const PERFORMANCE_STAGES = [
+  ['validationMeanF1', 'Source-held validation'],
+  ['testMeanF1', 'Held-out tests'],
+  ['contemporaryF1', '2026 diagnostic'],
+];
+
+function PerformanceGraph({ models }) {
+  const x = index => 90 + index * 265;
+  const y = value => 244 - value * 190;
+  const ticks = [0, 0.25, 0.5, 0.75, 1];
+  return <section className="panel audit-panel audit-graph-card">
+    <div className="audit-panel-head"><div><span className="eyebrow">GENERALIZATION CURVE</span><h3>Performance across evaluation settings</h3></div></div>
+    <p className="audit-caption">Macro-F1 falls when the source or time period becomes less familiar. Lines connect evaluation settings for comparison; they are not a time-series forecast.</p>
+    <div className="audit-svg-wrap">
+      <svg className="performance-graph" viewBox="0 0 640 285" role="img" aria-label="Macro F1 across source-held validation, held-out tests, and contemporary diagnostic">
+        {ticks.map(tick => <g key={tick}><line x1="58" y1={y(tick)} x2="620" y2={y(tick)} className="chart-grid" /><text x="49" y={y(tick) + 4} textAnchor="end" className="chart-axis-label">{Math.round(tick * 100)}%</text></g>)}
+        {PERFORMANCE_STAGES.map(([, label], index) => <text key={label} x={x(index)} y="275" textAnchor="middle" className="chart-stage-label">{label}</text>)}
+        {models.map(model => {
+          const points = PERFORMANCE_STAGES.map(([key], index) => `${x(index)},${y(model[key])}`).join(' ');
+          return <g key={model.id}>
+            <polyline points={points} fill="none" stroke={model.colour} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            {PERFORMANCE_STAGES.map(([key], index) => <g key={key}><circle cx={x(index)} cy={y(model[key])} r="6" fill={model.colour} stroke="var(--paper)" strokeWidth="3" /><text x={x(index)} y={y(model[key]) - 12} textAnchor="middle" className="chart-value-label" fill={model.colour}>{percent(model[key])}</text></g>)}
+          </g>;
+        })}
+      </svg>
+    </div>
+    <ModelLegend models={models} />
+  </section>;
+}
+
+function DatasetGraph({ models }) {
+  return <section className="panel audit-panel audit-graph-card">
+    <div className="audit-panel-head"><div><span className="eyebrow">DATASET COMPARISON</span><h3>Held-out macro-F1</h3></div></div>
+    <p className="audit-caption">Each collection is shown independently so strong ISOT performance cannot hide weaker BharatGather transfer.</p>
+    <div className="dataset-graph">
+      <div className="dataset-axis"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+      {trainingAudit.datasetResults.map(row => <div className="dataset-graph-row" key={row.dataset}>
+        <strong>{row.dataset}</strong>
+        <div className="dataset-bars">{models.map(model => <div className="dataset-bar-line" key={model.id} title={`${model.shortName}: ${percent(row[model.id])}`}><i style={{ width: percent(row[model.id]), background: model.colour }} /><b>{percent(row[model.id])}</b></div>)}</div>
+      </div>)}
+    </div>
+    <ModelLegend models={models} />
+  </section>;
+}
+
 function ValidationChart({ models }) {
   return <section className="panel audit-panel audit-validation">
     <div className="audit-panel-head"><div><span className="eyebrow">ROBUSTNESS FIRST</span><h3>Unseen-source validation</h3></div><span className="audit-info" title={METRIC_HELP.validation}>?</span></div>
@@ -33,7 +78,7 @@ function DatasetHeatmap({ models }) {
   return <section className="panel audit-panel audit-datasets">
     <div className="audit-panel-head"><div><span className="eyebrow">HELD-OUT TESTS</span><h3>Macro-F1 by dataset</h3></div><span className="audit-info" title={METRIC_HELP.test}>?</span></div>
     <p className="audit-caption">Each cell gives equal importance to the real and fake classes. Darker cells are stronger.</p>
-    <div className="audit-heatmap" role="table" aria-label="Held-out macro F1 by dataset and model">
+    <div className="audit-heatmap" role="table" aria-label="Held-out macro F1 by dataset and model" style={{ '--model-count': models.length }}>
       <div className="heatmap-row heatmap-head" role="row"><span>Dataset</span>{models.map(model => <span key={model.id}>{model.shortName.replace('Logistic ', 'Log. ')}</span>)}</div>
       {trainingAudit.datasetResults.map(row => <div className="heatmap-row" role="row" key={row.dataset}>
         <strong>{row.dataset}</strong>
@@ -97,6 +142,13 @@ function ForestTuning() {
   </section>;
 }
 
+function FinalComparison({ models }) {
+  return <section className="panel audit-panel audit-comparison">
+    <div className="audit-panel-head"><div><span className="eyebrow">FINAL COMPARISON</span><h3>All decision metrics</h3></div><span className="small-tag">Higher is better except Brier & errors</span></div>
+    <div className="comparison-scroll"><table><thead><tr><th>Model</th><th>Threshold</th><th>Validation F1</th><th>Held-out F1</th><th>Worst dataset</th><th>ROC-AUC</th><th>Brier ↓</th><th>2026 F1</th><th>Errors</th></tr></thead><tbody>{models.map(model => <tr className={model.selected ? 'selected' : ''} key={model.id}><th><i style={{ background: model.colour }} />{model.shortName}{model.selected && <span>Preferred</span>}</th><td>{model.threshold.toFixed(2)}</td><td>{percent(model.validationMeanF1)}</td><td><b>{percent(model.testMeanF1)}</b></td><td>{percent(model.testWorstF1)}</td><td>{model.meanRocAuc.toFixed(4)}</td><td>{model.meanBrier.toFixed(4)}</td><td>{percent(model.contemporaryF1)}</td><td>{(model.errors.falsePositive + model.errors.falseNegative).toLocaleString()}</td></tr>)}</tbody></table></div>
+  </section>;
+}
+
 export default function ModelAudit() {
   const [filter, setFilter] = useState('all');
   const visibleModels = useMemo(() => filter === 'all' ? trainingAudit.models : trainingAudit.models.filter(model => model.id === filter), [filter]);
@@ -111,6 +163,8 @@ export default function ModelAudit() {
 
     <section className="audit-kpis">{visibleModels.map(model => <article className={`panel audit-model-card ${model.selected ? 'selected' : ''}`} key={model.id} style={{ '--model-colour': model.colour }}><div><i /><span>{model.type}</span>{model.selected && <b>Preferred</b>}</div><h3>{model.shortName}</h3><strong>{percent(model.testMeanF1)}</strong><small>Mean held-out macro-F1</small><footer><span>Validation {percent(model.validationMeanF1)}</span><span>Contemporary {percent(model.contemporaryF1)}</span></footer></article>)}</section>
 
+    <div className="audit-visual-grid"><PerformanceGraph models={visibleModels} /><DatasetGraph models={visibleModels} /></div>
+
     <div className="audit-two-column"><ValidationChart models={visibleModels} /><DatasetHeatmap models={visibleModels} /></div>
     <div className="audit-two-column"><Thresholds models={visibleModels} /><CalibrationPanel models={visibleModels} /></div>
 
@@ -121,6 +175,8 @@ export default function ModelAudit() {
     </section>
 
     <div className="audit-two-column audit-bottom"><ErrorTradeoff models={visibleModels} /><ForestTuning /></div>
+
+    <FinalComparison models={visibleModels} />
 
     <section className="audit-method panel"><div><span className="eyebrow">READ THIS CORRECTLY</span><h3>Classification is not fact verification</h3></div><p>These models learn text patterns associated with dataset labels. High scores do not prove a claim is true or false. The future hybrid system must combine this signal with retrieved evidence, NLI verification, source context, and an explicit insufficient-evidence state.</p><a href="https://github.com/hardiktyagi032/hybrid-fake-news-detection/blob/main/docs/ml/classical_three_model_audit.md" target="_blank" rel="noreferrer">Read the complete methodology and limitations ↗</a></section>
     <ModelLegend models={trainingAudit.models} />
