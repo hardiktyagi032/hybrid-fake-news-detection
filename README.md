@@ -24,7 +24,7 @@ Phases 1-4 are complete:
 
 - supplied research materials reviewed and indexed;
 - proposed architecture, feature vector, assumptions, and risks documented;
-- private GitHub repository and local clone established;
+- public GitHub repository and local clone established;
 - reproducible Python environment instructions and initial checks added;
 - the eight user-supplied dataset sources downloaded and preserved with SHA-256 hashes;
 - source-specific schema, label, missingness, duplication, conflict, and leakage checks completed;
@@ -39,6 +39,17 @@ Classical ML now includes an auditable, dataset-balanced TF-IDF benchmark:
 - selection uses mean per-dataset validation macro-F1;
 - both final models receive one held-out evaluation on every dataset;
 - generated model files and metrics remain local and ignored by Git.
+
+A robustness audit and source-aware v2 experiment are also complete:
+
+- no exact or configured near-duplicate leakage was found across splits;
+- severe publisher/collection label shortcuts were measured in IFND and ISOT;
+- leave-one-dataset-out evaluation exposed weak unseen-source transfer;
+- source boilerplate masking and down-weighted LIAR endpoint examples improved
+  source-disjoint validation without introducing another classifier family;
+- Logistic Regression remains selected over calibrated Linear SVM;
+- a frozen 20-claim contemporary diagnostic improved from 0.6011 to 0.7333
+  macro-F1, but only half of the debunked claims were detected.
 
 The raw, interim, and processed dataset files remain local and are ignored by Git. Aggregate results and limitations are recorded in `docs/data/dataset_preparation_report.md`.
 
@@ -93,6 +104,12 @@ For the classical ML environment and benchmark:
 ```powershell
 python -m pip install -r requirements-ml.txt
 python -m scripts.train_classical_multidataset
+python -m scripts.audit_classical
+python -m scripts.evaluate_classical_lodo
+python -m scripts.select_robust_representation
+python -m scripts.train_classical_robust
+python -m scripts.evaluate_contemporary
+python -m scripts.export_classical_errors
 ```
 
 For Google Colab, use
@@ -104,6 +121,8 @@ the same validation and cross-dataset evaluation workflow.
 See `docs/ml/classical_baseline.md` for the protocol and
 `docs/ml/classical_results.md` for the original ISOT-only baseline. The improved
 dataset-balanced results are in `docs/ml/multidataset_results.md`.
+The leakage, source-shortcut, error, threshold, source-disjoint, and contemporary
+results are in `docs/ml/robustness_audit.md`.
 
 ## Dataset preparation
 
