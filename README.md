@@ -31,9 +31,16 @@ Phases 1-4 are complete:
 - conservative cleaned copies and deterministic leakage-aware splits generated locally;
 - preparation tooling tested with synthetic fixtures and verified against the real outputs.
 
+Classical ML work has now started with an auditable TF-IDF benchmark:
+
+- verified ISOT labels and the existing leakage-aware splits are used;
+- only logistic regression and calibrated linear SVM are compared;
+- selection uses validation macro-F1; both final models receive one held-out test evaluation;
+- generated model files and metrics remain local and ignored by Git.
+
 The raw, interim, and processed dataset files remain local and are ignored by Git. Aggregate results and limitations are recorded in `docs/data/dataset_preparation_report.md`.
 
-Not implemented: production APIs, data extraction services, classifiers, RAG, NLI, credibility scoring, fusion training, LLM calls, database services, frontend, deployment, and model evaluation.
+Not implemented: production APIs, data extraction services, transformer classification, RAG, NLI, credibility scoring, fusion training, LLM calls, database services, frontend, and deployment. Classical ML is an experimental baseline and is not yet integrated into an API.
 
 ## Proposed architecture
 
@@ -78,6 +85,16 @@ python scripts\validate_prepared_data.py --root .
 ```
 
 Application runtime dependencies intentionally remain empty until post-Phase-4 implementation choices justify them. Development dependencies are isolated in `requirements-dev.txt`; the Phase 4 preparation stack is isolated in `requirements-data.txt`.
+
+For the classical ML environment and benchmark:
+
+```powershell
+python -m pip install -r requirements-ml.txt
+python -m scripts.train_classical --dataset isot
+```
+
+See `docs/ml/classical_baseline.md` for the protocol and
+`docs/ml/classical_results.md` for the measured in-domain and cross-dataset results.
 
 ## Dataset preparation
 
