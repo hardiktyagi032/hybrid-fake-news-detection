@@ -37,8 +37,14 @@ def test_colab_notebook_uses_public_clone_drive_validation_and_external_evaluati
         "validate_prepared_data.py",
         "scripts.train_classical",
         "scripts.evaluate_classical",
-        "fake_probabilities",
+        "scripts.predict_classical",
     ]
     assert all(marker in notebook_text for marker in required_markers)
     assert "GITHUB_TOKEN" not in notebook_text
     assert "ghp_" not in notebook_text
+
+
+def test_colab_inference_uses_clean_subprocess() -> None:
+    notebook_text = NOTEBOOK_PATH.read_text(encoding="utf-8")
+    assert "capture_output=True" in notebook_text
+    assert "from backend.ml.classical_model import fake_probabilities" not in notebook_text

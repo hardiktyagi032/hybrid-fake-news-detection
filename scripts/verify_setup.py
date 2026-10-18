@@ -33,6 +33,7 @@ REQUIRED = [
     "scripts/validate_prepared_data.py",
     "scripts/train_classical.py",
     "scripts/evaluate_classical.py",
+    "scripts/predict_classical.py",
     "notebooks/classical_ml_colab.ipynb",
     "data/raw",
     "data/interim",
