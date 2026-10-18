@@ -52,9 +52,15 @@ A robustness audit and source-aware v2 experiment are also complete:
 - a frozen 20-claim contemporary diagnostic improved from 0.6011 to 0.7333
   macro-F1, but only half of the debunked claims were detected.
 
+The Veritas React frontend is now integrated from the collaborator repository,
+with its Git history preserved. Its new **Model audit** page visualizes the
+three-model results, per-dataset performance, thresholds, calibration,
+confusion matrices, error trade-offs, and Random Forest tuning audit. The
+fact-checking screens still use mock data until production API routes exist.
+
 The raw, interim, and processed dataset files remain local and are ignored by Git. Aggregate results and limitations are recorded in `docs/data/dataset_preparation_report.md`.
 
-Not implemented: production APIs, data extraction services, transformer classification, RAG, NLI, credibility scoring, fusion training, LLM calls, database services, frontend, and deployment. Classical ML is an experimental baseline and is not yet integrated into an API.
+Not implemented: production APIs, data extraction services, transformer classification, RAG, NLI, credibility scoring, fusion training, LLM calls, database services, and deployment. The frontend is present, but the classical models are not yet connected to it through an API.
 
 ## Proposed architecture
 
@@ -79,7 +85,7 @@ Retrieval relevance and factual verification remain separate. A relevant passage
 backend/       setup-safe Python package and planned module boundaries
 data/          ignored raw/interim/processed data locations
 docs/          research synthesis, architecture, decisions, and data protocol
-frontend/      frontend scope only; application not implemented
+frontend/      React/Vite application and classical-model audit visualizations
 notebooks/     future experiments; outputs and checkpoints are ignored
 scripts/       setup verification, dataset inspection, preparation, and validation
 tests/         setup and synthetic data-preparation checks
@@ -99,6 +105,21 @@ python scripts\validate_prepared_data.py --root .
 ```
 
 Application runtime dependencies intentionally remain empty until post-Phase-4 implementation choices justify them. Development dependencies are isolated in `requirements-dev.txt`; the Phase 4 preparation stack is isolated in `requirements-data.txt`.
+
+To run and verify the frontend:
+
+```powershell
+cd frontend
+pnpm install
+pnpm test
+pnpm build
+pnpm dev
+```
+
+The frontend was integrated from the collaborator's
+[Veritas repository](https://github.com/AarushVerma07/frontend-fake-news).
+See `docs/decisions/0004-integrate-veritas-frontend.md` for provenance and
+current integration boundaries.
 
 For the classical ML environment and benchmark:
 

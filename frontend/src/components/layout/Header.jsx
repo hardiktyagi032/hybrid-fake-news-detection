@@ -1,6 +1,6 @@
 import { useApp } from '../../context/AppContext';
 
-const titles = { 'fact-check': ['New fact check', 'Verify news with transparent, source-backed analysis'], result: ['Analysis result', 'Evidence-backed decision'], history: ['Analysis history', 'Your saved investigations'], dashboard: ['Dashboard', 'Your verification activity'], sources: ['Source library', 'Evidence used across your analyses'], settings: ['Settings', 'Control your workspace'], profile: ['Profile', 'Your account and preferences'] };
+const titles = { 'fact-check': ['New fact check', 'Verify news with transparent, source-backed analysis'], result: ['Analysis result', 'Evidence-backed decision'], history: ['Analysis history', 'Your saved investigations'], dashboard: ['Dashboard', 'Your verification activity'], 'model-audit': ['Model audit', 'Training results, robustness, and failure modes'], sources: ['Source library', 'Evidence used across your analyses'], settings: ['Settings', 'Control your workspace'], profile: ['Profile', 'Your account and preferences'] };
 
 export default function Header() {
   const { page, theme, setTheme } = useApp();

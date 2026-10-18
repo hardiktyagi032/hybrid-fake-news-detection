@@ -4,12 +4,13 @@ import NewAnalysis from './pages/NewAnalysis';
 import AnalysisResult from './pages/AnalysisResult';
 import History from './pages/History';
 import Dashboard from './pages/Dashboard';
+import ModelAudit from './pages/ModelAudit';
 import Sources from './pages/Sources';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
-const screens = { 'fact-check': NewAnalysis, result: AnalysisResult, history: History, dashboard: Dashboard, sources: Sources, settings: Settings, profile: Profile };
+const screens = { 'fact-check': NewAnalysis, result: AnalysisResult, history: History, dashboard: Dashboard, 'model-audit': ModelAudit, sources: Sources, settings: Settings, profile: Profile };
 
 function Router() {
   const { page } = useApp();

@@ -13,6 +13,8 @@ def test_setup_status_is_honest_about_scope() -> None:
     status = setup_status()
     assert status["phase"] == "classical-ml-three-model-audit"
     assert status["application_implemented"] == "false"
+    assert status["frontend_implemented"] == "true"
+    assert status["frontend_backend_connected"] == "false"
 
 
 def test_required_repository_boundaries_exist() -> None:

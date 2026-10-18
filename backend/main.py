@@ -17,6 +17,8 @@ def setup_status() -> dict[str, str]:
         "version": __version__,
         "phase": "classical-ml-three-model-audit",
         "application_implemented": "false",
+        "frontend_implemented": "true",
+        "frontend_backend_connected": "false",
     }
 
 

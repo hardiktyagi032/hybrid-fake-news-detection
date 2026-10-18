@@ -1,7 +1,7 @@
 import { useApp } from '../../context/AppContext';
 
 const nav = [
-  ['fact-check', '✦', 'Fact check'], ['dashboard', '▦', 'Dashboard'], ['history', '◷', 'History'], ['sources', '⌕', 'Sources'],
+  ['fact-check', '✦', 'Fact check'], ['dashboard', '▦', 'Dashboard'], ['model-audit', '⌁', 'Model audit'], ['history', '◷', 'History'], ['sources', '⌕', 'Sources'],
 ];
 
 export default function Sidebar() {
