@@ -46,6 +46,8 @@ class ClassicalModelConfig:
     sublinear_tf: bool = True
     class_weight: str | None = "balanced"
     random_state: int = 20_261_017
+    logistic_c: float = 2.0
+    svm_c: float = 1.0
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -111,7 +113,7 @@ def build_pipeline(model_name: str, config: ClassicalModelConfig | None = None) 
 
     if model_name == "logistic_regression":
         classifier: Any = LogisticRegression(
-            C=2.0,
+            C=config.logistic_c,
             class_weight=config.class_weight,
             max_iter=1_000,
             random_state=config.random_state,
@@ -120,7 +122,7 @@ def build_pipeline(model_name: str, config: ClassicalModelConfig | None = None) 
     elif model_name == "linear_svm":
         classifier = CalibratedClassifierCV(
             estimator=LinearSVC(
-                C=1.0,
+                C=config.svm_c,
                 class_weight=config.class_weight,
                 random_state=config.random_state,
             ),
