@@ -35,8 +35,7 @@ def test_colab_notebook_uses_public_clone_drive_validation_and_external_evaluati
         'https://github.com/{REPO_OWNER}/{REPO_NAME}.git',
         'drive.mount(\\"/content/drive\\")',
         "validate_prepared_data.py",
-        "scripts.train_classical",
-        "scripts.evaluate_classical",
+        "scripts.train_classical_multidataset",
         "scripts.predict_classical",
     ]
     assert all(marker in notebook_text for marker in required_markers)

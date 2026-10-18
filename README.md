@@ -31,11 +31,13 @@ Phases 1-4 are complete:
 - conservative cleaned copies and deterministic leakage-aware splits generated locally;
 - preparation tooling tested with synthetic fixtures and verified against the real outputs.
 
-Classical ML work has now started with an auditable TF-IDF benchmark:
+Classical ML now includes an auditable, dataset-balanced TF-IDF benchmark:
 
-- verified ISOT labels and the existing leakage-aware splits are used;
+- verified labels and leakage-aware splits from ISOT, IFND, Indian Fake News, and BharatGather are used;
 - only logistic regression and calibrated linear SVM are compared;
-- selection uses validation macro-F1; both final models receive one held-out test evaluation;
+- dataset/class-balanced sample weights prevent large collections from dominating;
+- selection uses mean per-dataset validation macro-F1;
+- both final models receive one held-out evaluation on every dataset;
 - generated model files and metrics remain local and ignored by Git.
 
 The raw, interim, and processed dataset files remain local and are ignored by Git. Aggregate results and limitations are recorded in `docs/data/dataset_preparation_report.md`.
@@ -90,7 +92,7 @@ For the classical ML environment and benchmark:
 
 ```powershell
 python -m pip install -r requirements-ml.txt
-python -m scripts.train_classical --dataset isot
+python -m scripts.train_classical_multidataset
 ```
 
 For Google Colab, use
@@ -100,7 +102,8 @@ data and model artifacts, trains only Logistic Regression and Linear SVM, and ru
 the same validation and cross-dataset evaluation workflow.
 
 See `docs/ml/classical_baseline.md` for the protocol and
-`docs/ml/classical_results.md` for the measured in-domain and cross-dataset results.
+`docs/ml/classical_results.md` for the original ISOT-only baseline. The improved
+dataset-balanced results are in `docs/ml/multidataset_results.md`.
 
 ## Dataset preparation
 
