@@ -1,0 +1,43 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+NOTEBOOK_PATH = ROOT / "notebooks" / "classical_ml_colab.ipynb"
+
+
+def load_notebook() -> dict[str, object]:
+    return json.loads(NOTEBOOK_PATH.read_text(encoding="utf-8"))
+
+
+def test_colab_notebook_is_valid_clean_v4_json() -> None:
+    notebook = load_notebook()
+    assert notebook["nbformat"] == 4
+    cells = notebook["cells"]
+    assert isinstance(cells, list) and cells
+    code_cells = [cell for cell in cells if cell["cell_type"] == "code"]
+    assert all(cell["execution_count"] is None for cell in code_cells)
+    assert all(cell["outputs"] == [] for cell in code_cells)
+
+
+def test_colab_notebook_uses_only_approved_classical_models() -> None:
+    notebook_text = NOTEBOOK_PATH.read_text(encoding="utf-8")
+    assert 'APPROVED_MODELS = (\\"logistic_regression\\", \\"linear_svm\\")' in notebook_text
+    assert "random_forest" not in notebook_text.casefold()
+    assert "xgboost" not in notebook_text.casefold()
+
+
+def test_colab_notebook_uses_secrets_drive_validation_and_external_evaluation() -> None:
+    notebook_text = NOTEBOOK_PATH.read_text(encoding="utf-8")
+    required_markers = [
+        'userdata.get(\\"GITHUB_TOKEN\\")',
+        'drive.mount(\\"/content/drive\\")',
+        "validate_prepared_data.py",
+        "scripts.train_classical",
+        "scripts.evaluate_classical",
+        "fake_probabilities",
+    ]
+    assert all(marker in notebook_text for marker in required_markers)
+    assert "ghp_" not in notebook_text
