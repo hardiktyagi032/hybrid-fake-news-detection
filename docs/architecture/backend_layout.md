@@ -8,7 +8,7 @@ backend/
   config/                 safe environment settings
   api/                    future input, analysis, and health routes
   preprocessing/          future text, URL, PDF, and OCR extraction
-  ml/                     future classical and transformer classifiers
+  ml/                     implemented classical models/loader; transformer future
   rag/                    future claims, sources, retrieval, fusion, reranking
   nli/                    future claim-evidence verification
   credibility/            future transparent source features
@@ -20,4 +20,7 @@ backend/
   utils/                  setup-safe reproducibility helpers
 ```
 
-API contracts, database schema, external services, and model loaders remain unimplemented because they depend on dataset findings and later authorization.
+The classical package now contains the three approved TF-IDF pipelines plus a
+checksum-validated local artifact registry and model-wise inference service.
+API contracts, database schema, external services, and non-classical model
+loaders remain unimplemented because they depend on later authorization.

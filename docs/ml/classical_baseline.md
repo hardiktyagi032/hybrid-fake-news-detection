@@ -6,7 +6,9 @@ This stage implements article-level content classification only. It produces the
 first fusion-vector feature, `classical_fake_probability`, using the convention
 `0 = real` and `1 = fake`. It does not retrieve evidence or verify claims.
 
-Only two classical models are in scope: logistic regression and linear SVM.
+This document records the original two-model baseline. Random Forest was added
+later under ADR 0003; see `classical_three_model_audit.md` for current scope and
+results.
 
 ## Initial benchmark dataset
 

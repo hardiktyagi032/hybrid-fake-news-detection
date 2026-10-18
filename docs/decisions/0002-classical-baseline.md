@@ -3,6 +3,8 @@
 ## Status
 
 Accepted after the user explicitly authorized post-Phase-4 classical ML work.
+Superseded for the current three-model scope by ADR 0003; retained as the
+historical first-baseline decision.
 
 ## Decision
 

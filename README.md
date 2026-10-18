@@ -34,7 +34,7 @@ Phases 1-4 are complete:
 Classical ML now includes an auditable, dataset-balanced TF-IDF benchmark:
 
 - verified labels and leakage-aware splits from ISOT, IFND, Indian Fake News, and BharatGather are used;
-- only logistic regression and calibrated linear SVM are compared;
+- logistic regression, calibrated linear SVM, and Random Forest are compared;
 - dataset/class-balanced sample weights prevent large collections from dominating;
 - selection uses mean per-dataset validation macro-F1;
 - both final models receive one held-out evaluation on every dataset;
@@ -47,7 +47,8 @@ A robustness audit and source-aware v2 experiment are also complete:
 - leave-one-dataset-out evaluation exposed weak unseen-source transfer;
 - source boilerplate masking and down-weighted LIAR endpoint examples improved
   source-disjoint validation without introducing another classifier family;
-- Logistic Regression remains selected over calibrated Linear SVM;
+- a validation-only Random Forest tuning audit retained the 200-tree forest,
+  while Logistic Regression remained preferred over both alternative models;
 - a frozen 20-claim contemporary diagnostic improved from 0.6011 to 0.7333
   macro-F1, but only half of the debunked claims were detected.
 
@@ -115,7 +116,7 @@ python -m scripts.export_classical_errors
 For Google Colab, use
 [Open in Colab](https://colab.research.google.com/github/hardiktyagi032/hybrid-fake-news-detection/blob/main/notebooks/classical_ml_colab.ipynb).
 The public notebook requires no GitHub token. It uses Google Drive for persistent
-data and model artifacts, trains only Logistic Regression and Linear SVM, and runs
+data and model artifacts, trains Logistic Regression, Linear SVM, and Random Forest, and runs
 the same validation and cross-dataset evaluation workflow.
 
 See `docs/ml/classical_baseline.md` for the protocol and
@@ -123,6 +124,8 @@ See `docs/ml/classical_baseline.md` for the protocol and
 dataset-balanced results are in `docs/ml/multidataset_results.md`.
 The leakage, source-shortcut, error, threshold, source-disjoint, and contemporary
 results are in `docs/ml/robustness_audit.md`.
+The completed three-model comparison and Random Forest tuning decisions are in
+`docs/ml/classical_three_model_audit.md`.
 
 ## Dataset preparation
 
