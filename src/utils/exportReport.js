@@ -1,0 +1,1 @@
+export function exportReport(analysis) { const body = JSON.stringify(analysis, null, 2); const blob = new Blob([body], { type: 'application/json' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'veritas-analysis.json'; link.click(); URL.revokeObjectURL(url); }

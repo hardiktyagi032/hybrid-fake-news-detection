@@ -1,0 +1,1 @@
+export default function HistorySearch({ value, onChange }) { return <label className="search-field"><span>⌕</span><input value={value} onChange={event => onChange(event.target.value)} placeholder="Search analyses" /></label>; }

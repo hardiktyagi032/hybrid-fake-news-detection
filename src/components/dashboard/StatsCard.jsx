@@ -1,0 +1,1 @@
+export default function StatsCard({ label, value, change, accent }) { return <article className="stats-card panel"><span className={`stat-accent ${accent || ''}`} /> <p>{label}</p><strong>{value}</strong><small>{change}</small></article>; }

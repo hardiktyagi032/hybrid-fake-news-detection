@@ -1,0 +1,1 @@
+export default function SourceFilters({ filter, onChange }) { return <div className="source-filters">{['all', 'supports', 'contradicts'].map(item => <button key={item} className={filter === item ? 'selected' : ''} onClick={() => onChange(item)}>{item === 'all' ? 'All evidence' : item[0].toUpperCase() + item.slice(1)}</button>)}</div>; }
