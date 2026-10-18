@@ -47,3 +47,10 @@ def test_colab_inference_uses_clean_subprocess() -> None:
     notebook_text = NOTEBOOK_PATH.read_text(encoding="utf-8")
     assert "capture_output=True" in notebook_text
     assert "from backend.ml.classical_model import fake_probabilities" not in notebook_text
+
+
+def test_colab_clone_leaves_old_repository_before_replacing_it() -> None:
+    notebook_text = NOTEBOOK_PATH.read_text(encoding="utf-8")
+    change_directory = notebook_text.index('os.chdir(\\"/content\\")')
+    remove_repository = notebook_text.index("shutil.rmtree(REPO_DIR)")
+    assert change_directory < remove_repository
